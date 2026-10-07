@@ -22,7 +22,7 @@ class UsuarioService:
                 "rol": usuario["rol"],
                 "estado": usuario["estado"],
                 "fecha_registro": (
-                    usuario["fecha_registro"].isoformat()
+                    usuario["fecha_registro"].isoformat() #Formato ISO de python para fechas
                     if usuario["fecha_registro"] is not None
                     else None
                 )

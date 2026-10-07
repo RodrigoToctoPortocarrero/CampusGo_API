@@ -5,7 +5,7 @@ class UsuarioRepository:
         self.connection = connection
 
     def buscar_por_email(self, email):
-        cursor = self.connection.cursor()
+        cursor = self.connection.cursor() #Crea el cursor, quien ejecuta las consultas SQL
         try:
             sql = """
                 SELECT 
@@ -21,7 +21,7 @@ class UsuarioRepository:
                 LIMIT 1
             """
             cursor.execute(sql, (email,))
-            return cursor.fetchone()
+            return cursor.fetchone() #Toma la primera fila y devuelve un diccionario
         finally:
             cursor.close()
 
@@ -66,5 +66,57 @@ class UsuarioRepository:
         except Exception:
             self.connection.rollback()
             raise
+        finally:
+            cursor.close()
+
+
+    def guardar_usuario(self, usuario):
+        cursor = self.connection.cursor()
+        try:
+            sql = """
+                INSERT INTO usuario (email, password_hash, nombres, apellidos, rol, estado)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """
+            cursor.execute(sql, (
+                usuario.get('email'),
+                usuario.get('password_hash'),
+                usuario.get('nombres'),
+                usuario.get('apellidos'),
+                usuario.get('rol', 'usuario'),
+                usuario.get('estado', 1)
+            ))
+            return cursor.lastrowid
+        finally:
+            cursor.close()
+
+    def guardar_pasajero(self, id_usuario):
+        cursor = self.connection.cursor()
+        try:
+            sql = """
+                INSERT INTO pasajero (usuario_id)
+                VALUES (%s)
+            """
+            cursor.execute(sql, (
+                id_usuario,
+            ))
+            
+            return cursor.lastrowid
+        finally:
+            cursor.close()
+
+    def guardar_conductor(self, id_usuario, licencia, calificacion):
+        cursor = self.connection.cursor()
+        try:
+            sql = """
+                INSERT INTO conductor (usuario_id,licencia, calificacion)
+                VALUES (%s,%s,%s)
+            """
+            cursor.execute(sql, (
+                id_usuario,
+                licencia,
+                calificacion
+            ))
+            self.connection.commit()
+            return cursor.lastrowid
         finally:
             cursor.close()

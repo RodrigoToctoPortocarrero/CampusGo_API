@@ -12,7 +12,7 @@ usuario_bp = Blueprint("usuarios", __name__)
 @usuario_bp.route("/api/perfil", methods=["GET"])
 @jwt_required()
 def obtener_perfil():
-    usuario_id = get_jwt_identity()
+    usuario_id = get_jwt_identity() #Se obtiene la valor de la clave "sub"
 
     service = UsuarioService()
 

@@ -2,7 +2,7 @@ import os
 from datetime import timedelta
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv() #Cargar las variables de entorno
 
 class Config:
     MYSQL_HOST = os.getenv("MYSQL_HOST", "localhost")
